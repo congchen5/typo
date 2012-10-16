@@ -473,6 +473,8 @@ class Article < Content
     other_article = Article.find(merge_id)
     new_article.body = (self.body + other_article.body)
     new_article.published_at = DateTime.strptime(params[:article][:published_at], "%B %e, %Y %I:%M %p GMT%z").utc rescue Time.parse(params[:article][:published_at]).utc rescue nil
+
+    new_article.save
     
     return new_article
   end

@@ -147,14 +147,14 @@
       <%= render 'admin/content/attachment', { :attachment_num => 1, :hidden => false } -%>
     </ul>
   </div>
-
+<!--, :html => {:id => 'merge_with'} -->
   <div class =''>
     <h4><%= _("Merge Articles") %></h4>
-    <%= form_for :content, :url => '/admin/merge', :html => {:id => 'merge_with'} do |f| %>
-      Article ID: <%= f.text_field :merge_id%>
-      <%= f.hidden_field :id, {:value => @article.id} %>
+    <%= form_tag(url_for(:controller => 'content_controller', :action => 'merge_article')) do %>
+      Article ID: <%= text_field_tag :merge_id %>
+      <%= hidden_field_tag :id, {:value => @article.id} %>
       <br>
-      <%= f.submit "Merge"%>
+      <%= submit_tag "Merge"%>
     <% end %>
   </div>
 
