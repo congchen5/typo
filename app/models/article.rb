@@ -191,6 +191,16 @@ class Article < Content
     end
   end
 
+  def merge_with(other_article_id)
+    other_article = Article.find(other_article_id)
+    self.body = (self.body + other_article.body)
+    other_article.comments.each do |com|
+        com.article_id = self.id
+        com.save
+    end
+    self.save
+  end
+
   def comment_url
     blog.url_for("comments?article_id=#{self.id}", :only_path => false)
   end
@@ -465,17 +475,5 @@ class Article < Content
     to = from + 1.day unless day.blank?
     to = to - 1 # pull off 1 second so we don't overlap onto the next day
     return from..to
-  end
-
-  def merge_with(merge_id)
-    new_article = Article.new()
-    new_article.author = self.author
-    other_article = Article.find(merge_id)
-    new_article.body = (self.body + other_article.body)
-    new_article.published_at = DateTime.strptime(params[:article][:published_at], "%B %e, %Y %I:%M %p GMT%z").utc rescue Time.parse(params[:article][:published_at]).utc rescue nil
-
-    new_article.save
-    
-    return new_article
   end
 end

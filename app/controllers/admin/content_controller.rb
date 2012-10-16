@@ -32,29 +32,22 @@ class Admin::ContentController < Admin::BaseController
     merge_id = params[:merge_id]
     if params[:id] == params[:merge_id]
       flash[:notice] = _("Cannot merge article with itself") 
-      redirect_to path_admin_content
+      redirect_to :action => 'index'
       return
     end
     if not current_user.admin?
       flash[:notice] = _("User not admin")
-      redirect_to path_admin_content
+      redirect_to :action => 'index'
       return
     end
     article2 = Article.find(merge_id)
     if not article2
       flash[:notice] = _("Cannot find merge article specified by ID") 
-      redirect_to path_admin_content
+      redirect_to :action => 'index'
       return
     else
       # Merge
-      current_article.body = (current_article.body + article2.body)
-      article2.comments.each do |com|
-        com.article_id = current_article.id
-        com.save
-      end
-        #params = {}
-        #article2.comments.column_names
-      current_article.save
+      current_article.merge_with(merge_id)
       redirect_to :action => 'index'
     end
 
