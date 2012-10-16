@@ -466,4 +466,10 @@ class Article < Content
     to = to - 1 # pull off 1 second so we don't overlap onto the next day
     return from..to
   end
+
+  def merge_with
+    new_article = Article.new()
+    other_article = Article.
+
+  end
 end

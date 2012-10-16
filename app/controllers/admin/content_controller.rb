@@ -240,4 +240,30 @@ class Admin::ContentController < Admin::BaseController
   def setup_resources
     @resources = Resource.by_created_at
   end
+
+  def merge_article
+    current_article = Article.find(params[:id])
+    merge_id = params[:merge_id]
+    if params[:id] == params[:merge_id]
+      flash[:notice] = _("Cannot merge article with itself") 
+      redirect_to path_admin_content
+    end
+    if not current_user.admin?
+      flash[:notice] = _("User not admin") 
+    end
+    article2 = Article.find(merge_id)
+    if not article2
+      flash[:notice] = _("Cannot find merge article specified by ID") 
+      redirect_to path_admin_content
+    else
+      # Merge
+      new_article = current_article.merge_with(merge_id)
+
+      set_article_categories
+      set_the_flash
+      redirect_to :action => 'index'
+      return
+    end
+
+  end
 end
