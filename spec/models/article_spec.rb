@@ -83,6 +83,33 @@ describe Article do
     assert_equal "http://myblog.net/2004/06/01/article-3.rss", a.feed_url(:rss20)
   end
 
+  describe "merge articles" do
+    it "should combine the two texts" do
+      a = Article.new
+      a.body = "Foo"
+      a.id = 10
+      b = Article.new
+      b.body = "Bar"
+      Article.stub('find').and_return(b)
+      a.merge_with(10)
+      assert_equal "FooBar", a.body
+    end
+
+    it "should keep title of one or other article" do
+      a = Article.new
+      a.body = "Foo"
+      a.title = "Tit1"
+      b = Article.new
+      b.body = "Bar"
+      b.title = "Tit2"
+      Article.stub('find').and_return(b)
+      a.merge_with(10)
+      bol = ("Tit1" == a.title) or ("Tit2" == a.title)
+      assert bol
+    end
+    
+  end
+
   it "test_create" do
     a = Article.new
     a.user_id = 1

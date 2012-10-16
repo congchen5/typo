@@ -299,6 +299,8 @@ describe Admin::ContentController do
       end
     end
 
+    
+
     it 'should create an article in a category' do
       category = Factory(:category)
       post :new, 'article' => base_article, 'categories' => [category.id]
@@ -481,6 +483,16 @@ describe Admin::ContentController do
     it_should_behave_like 'destroy action'
     it_should_behave_like 'autosave action'
 
+    describe 'merge_article' do
+      it 'should allow merging for admin' do
+        mockArticle = mock('Article')
+        mockArticle.stub('id').and_return(3)
+        Article.stub('find').and_return(mockArticle)
+        mockArticle.should_receive(:merge_with).with(4)
+        get :merge_article, 'id' => 5, 'merge_id' => 4
+      end
+    end
+
     describe 'edit action' do
 
       it 'should edit article' do
@@ -621,6 +633,16 @@ describe Admin::ContentController do
     it_should_behave_like 'index action'
     it_should_behave_like 'new action'
     it_should_behave_like 'destroy action'
+
+    describe 'merge_article' do
+      it 'should not allow merging for non-admin' do
+        mockArticle = mock('Article')
+        mockArticle.stub('id').and_return(3)
+        Article.stub('find').and_return(mockArticle)
+        mockArticle.should_not_receive(:merge_with).with(4)
+        get :merge_article, 'id' => 5, 'merge_id' => 4
+      end
+    end
 
     describe 'edit action' do
 
