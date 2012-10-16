@@ -27,6 +27,16 @@ class Admin::ContentController < Admin::BaseController
     new_or_edit
   end
 
+  def edit
+    @article = Article.find(params[:id])
+    unless @article.access_by? current_user
+      redirect_to :action => 'index'
+      flash[:error] = _("Error, you are not allowed to perform this action")
+      return
+    end
+    new_or_edit
+  end
+
   def merge_article
     current_article = Article.find(params[:id])
     merge_id = params[:merge_id]
@@ -45,22 +55,10 @@ class Admin::ContentController < Admin::BaseController
       flash[:notice] = _("Cannot find merge article specified by ID") 
       redirect_to :action => 'index'
       return
-    else
-      # Merge
-      current_article.merge_with(merge_id)
-      redirect_to :action => 'index'
     end
-
-  end
-
-  def edit
-    @article = Article.find(params[:id])
-    unless @article.access_by? current_user
-      redirect_to :action => 'index'
-      flash[:error] = _("Error, you are not allowed to perform this action")
-      return
-    end
-    new_or_edit
+    # Merge
+    current_article.merge_with(merge_id)
+    redirect_to :action => 'index'
   end
 
   def destroy
@@ -88,7 +86,7 @@ class Admin::ContentController < Admin::BaseController
   end
 
   def category_add; do_add_or_remove_fu; end
-  alias_method :resource_add,    :category_add
+  alias_method :resource_add, :category_add
   alias_method :resource_remove, :category_add
 
   def attachment_box_add
@@ -103,7 +101,7 @@ class Admin::ContentController < Admin::BaseController
 
   def attachment_save(attachment)
     begin
-      Resource.create(:filename => attachment.original_filename, :mime => attachment.content_type.chomp, 
+      Resource.create(:filename => attachment.original_filename, :mime => attachment.content_type.chomp,
                       :created_at => Time.now).write_to_disk(attachment)
     rescue => e
       logger.info(e.message)
@@ -146,8 +144,8 @@ class Admin::ContentController < Admin::BaseController
       parent_id = @article.id
       @article = Article.drafts.child_of(parent_id).first || Article.new
       @article.allow_comments = this_blog.default_allow_comments
-      @article.allow_pings    = this_blog.default_allow_pings
-      @article.parent_id      = parent_id
+      @article.allow_pings = this_blog.default_allow_pings
+      @article.parent_id = parent_id
     end
   end
 
@@ -227,7 +225,7 @@ class Admin::ContentController < Admin::BaseController
   def set_article_author
     return if @article.author
     @article.author = current_user.login
-    @article.user   = current_user
+    @article.user = current_user
   end
 
   def set_article_title_for_autosave
