@@ -199,6 +199,7 @@ class Article < Content
         com.save
     end
     self.save
+    other_article.destroy()
   end
 
   def comment_url
