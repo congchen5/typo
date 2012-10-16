@@ -6,8 +6,8 @@ Feature: Merge Articles
   Background:
     Given the blog is set up
     And the following articles exist:
-    | id | title               | author  | body                        |
-    | 1  | Orig Article        | Person1 | Article 1 to be merged body |
+    | title               | author  | body                        |
+    | Orig Article        | Person1 | Article 1 to be merged body |
 
 
   Scenario: non-admin cannot merge articles
@@ -30,12 +30,12 @@ Feature: Merge Articles
 
     # Merging with another article
     Then I should see "Merge Article"
-    Then I should see "Article ID:"
-    And I fill in "merge_id" with "1"
+    And I should see "Article ID:"
+    When I merge in "merge_id" with the newest added article
     And I press "Merge"
     Then I should be on the admin content page
     Then I should see "Merge Article Title"
     When I follow "Merge Article Title"
     Then I should see "New Body"
-    And I should see "Welcome to Typo. This is your first article."
+    And I should see "Article 1 to be merged body"
  

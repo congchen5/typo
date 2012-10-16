@@ -113,6 +113,10 @@ When /^(?:|I )fill in "([^"]*)" for "([^"]*)"$/ do |value, field|
   fill_in(field, :with => value)
 end
 
+When /^(?:|I )merge in "([^"]*)" with the newest added article$/ do |field|
+  value = Article.find_by_title("Orig Article")['id']
+  fill_in(field, :with => value)
+end
 # Use this to fill in an entire form with data from a table. Example:
 #
 #   When I fill in the following:
