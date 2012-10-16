@@ -222,8 +222,6 @@ class Admin::ContentController < Admin::BaseController
       flash[:notice] = _('Article was successfully created')
     when 'edit'
       flash[:notice] = _('Article was successfully updated.')
-    when 'merge_article'
-      flash[:notice] = _('Article was successfully updated.')
     else
       raise "I don't know how to tidy up action: #{params[:action]}"
     end
