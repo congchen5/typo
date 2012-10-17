@@ -31,7 +31,7 @@ Feature: Merge Articles
     # Merging with another article
     Then I should see "Merge Article"
     And I should see "Article ID:"
-    When I merge in "merge_id" with the newest added article
+    When I merge in "merge_with" with the newest added article
     And I press "Merge"
     Then I should be on the admin content page
     Then I should see "Merge Article Title"
