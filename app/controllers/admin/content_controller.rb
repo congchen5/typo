@@ -39,8 +39,8 @@ class Admin::ContentController < Admin::BaseController
 
   def merge_article
     current_article = Article.find(params[:id])
-    merge_id = params[:merge_id]
-    if params[:id] == params[:merge_id]
+    merge_id = params[:merge_with]
+    if params[:id] == params[:merge_with]
       flash[:notice] = _("Cannot merge article with itself") 
       redirect_to :action => 'index'
       return
