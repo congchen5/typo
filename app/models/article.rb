@@ -195,8 +195,10 @@ class Article < Content
     other_article = Article.find(other_article_id)
     self.body = (self.body + other_article.body)
     other_article.comments.each do |com|
-        com.article_id = self.id
-        com.save
+      newCom = com.dup
+      newCom.article_id = self.id
+      newCom.id = newCom.id + 20
+      newCom.save
     end
     self.save
     other_article.destroy()
