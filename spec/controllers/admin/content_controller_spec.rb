@@ -489,7 +489,7 @@ describe Admin::ContentController do
         mockArticle.stub('id').and_return(3)
         Article.stub('find').and_return(mockArticle)
         mockArticle.should_receive(:merge_with).with(4)
-        get :merge_article, 'id' => 5, 'merge_id' => 4
+        get :merge_article, 'id' => 5, 'merge_with' => 4
       end
     end
 
