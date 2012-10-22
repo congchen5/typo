@@ -281,6 +281,11 @@ end
  
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
+  # handle the case of the edit url with the trailing number
+  if page_name == 'the edit category page'
+    current_path = current_path.slice(0,(current_path.length - current_path.reverse.index("/") - 1))
+  end
+
   if current_path.respond_to? :should
     current_path.should == path_to(page_name)
   else
